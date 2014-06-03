@@ -29,6 +29,9 @@ def openFile(filename):
     with open(filename, "rU") as x:# If unopenable, allow to crash
         return x.read()
 
+def isZero(x):
+    return x == 0
+
 def inc(ind, ptr, ptrInd, state):
     ptr[ptrInd] += 1
     return iterate(ind, ptr, ptrInd, state)
@@ -53,22 +56,20 @@ def prt(ind, ptr, ptrInd, state):
     print(chr(ptr[ptrInd]), end = '')
     return iterate(ind, ptr, ptrInd, state)
 
-def get(ind, ptr, ptrInd, state):
-    ptr[ptrInd] = ord(input(""))
+def getChar(ind, ptr, ptrInd, state):
+    ptr[ptrInd] = ord(input("")[0])
     return iterate(ind, ptrInd, state)
 
 def inLoop(ind, ptr, ptrInd, state):
-    if ptr[ptrInd] != 0 and ind not in state:
+    notZero = not isZero(ptr[ptrInd])
+    notContained = ind not in state
+    if notZero and notContained:
         state.append(ind)
     return iterate(ind, ptr, ptrInd, state)
 
 def outLoop(ind, ptr, ptrInd, state):
-    if ptr[ptrInd] != 0:
-        ind = state[-1]
-    else:
-        state.pop()
-        ind += 1
-    return ind, ptr, ptrInd, state
+    notZero = not isZero(ptr[ptrInd])
+    return iterate(state[-1], ptr, ptrInd, state) if notZero else iterate(ind, ptr, ptrInd, state[:-1])
 
 def iterate(ind, ptr, ptrInd, state):
     return ind+1, ptr, ptrInd, state
@@ -79,7 +80,7 @@ def execute(ind, ptr, ptrInd, state, char):
             ">":fwd,
             "<":bwd,
             ".":prt,
-            ",":get,
+            ",":getChar,
             "[":inLoop,
             "]":outLoop}
     return options.get(char, iterate)(ind, ptr, ptrInd, state)
@@ -91,6 +92,5 @@ def parse(text):
 
 def main(files):
     [i for i in map(lambda x: parse(openFile(x)), files)]
-
 
 if __name__=="__main__": main(sys.argv[1:])
