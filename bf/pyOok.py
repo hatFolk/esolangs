@@ -9,13 +9,9 @@ def ooktoBf(text):
             ("Ook.","Ook!"):",",
             ("Ook!","Ook?"):"[",
             ("Ook?","Ook!"):"]"}
-    text = text.replace("\n", " ")
-    text = text.split(" ")
-    text = [i for i in text if i != '']
-    x = []
-    for i in range(0, len(text)-1, 2):
-        y  = options.get((text[i], text[i+1]))
-        x.append(y)
+    text = text.replace("\n", " ")[:-1].split(" ")
+    text = [i for i in text if i != ""] # This seems wasteful.
+    x  = [options.get((text[i], text[i+1]), "") for i in range(0, len(text)-1, 2)]
     return "".join(x)
 
 def main(files):

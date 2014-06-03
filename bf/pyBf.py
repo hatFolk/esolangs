@@ -58,7 +58,7 @@ def prt(ind, ptr, ptrInd, state):
 
 def getChar(ind, ptr, ptrInd, state):
     ptr[ptrInd] = ord(input("")[0])
-    return iterate(ind, ptrInd, state)
+    return iterate(ind, ptr, ptrInd, state)
 
 def inLoop(ind, ptr, ptrInd, state):
     notZero = not isZero(ptr[ptrInd])
